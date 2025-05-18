@@ -32,48 +32,134 @@ It’s built to make life easier for students, teachers, and admins by replacing
 - Deployment: AWS, Github
 
 
-## Run Locally
+# 🪑 Seating Arrangement & QR Attendance System - Spring Boot
 
-- Clone the project
+This is a **Spring Boot-based REST API** application that allows teachers to:
+- Generate a unique QR code-based session for attendance.
+- Allow students to mark attendance by scanning the QR code.
+- Create and retrieve class room seating arrangements.
+- Use **Swagger UI** to test and explore all endpoints interactively.
+
+---
+
+## 🚀 Features
+
+- ✅ Generate unique class sessions with QR code.
+- ✅ Mark attendance using enrollment number and Gmail.
+- ✅ Create class rooms with rows of seats.
+- ✅ Retrieve class room layout by class number.
+- ✅ Fully documented APIs using **Swagger UI**.
+- ✅ MySQL integration for persistent storage.
+
+---
+
+## 🛠️ Tech Stack
+
+- **Java 17**
+- **Spring Boot 3.4.4**
+- **MySQL**
+- **Swagger (springdoc-openapi)**
+- **ZXing** for QR Code generation
+
+---
+
+## 📦 Project Structure
+
+├── controller
+│ ├── AttendanceController.java
+│ └── ClassRoomController.java
+├── dto
+│ ├── SessionRequest.java
+│ └── AttendanceRequest.java
+├── model
+│ ├── Session.java
+│ ├── Attendance.java
+│ └── ClassRoom.java
+├── repository
+│ ├── SessionRepository.java
+│ └── AttendanceRepository.java
+├── service
+│ └── ClassRoomService.java
+├── util
+│ └── QRCodeGenerator.java
+└── resources
+└── application.properties
+
+
+---
+
+## 🔧 Setup & Run
+
+### ✅ 1. Clone the Repository
 
 ```bash
-  git clone https://github.com/Neerja13/EduSync.git
-```
+git clone https://github.com/your-username/seating-arrangement.git
+cd seating-arrangement
 
-- Navigate to the project directory
+✅ 2. Configure MySQL
 
-```bash
-  cd EduSync
-```
-- Set up the backend
+Ensure MySQL is running, and update src/main/resources/application.properties:
 
-    -- Install Java and Spring Boot dependencies.
+spring.datasource.url=jdbc:mysql://localhost:3306/seating_arrangement
+spring.datasource.username=root
+spring.datasource.password=maheshvic123
 
-    -- Configure the database (MySQL) in application.properties.
+    Tip: You can change port by editing server.port=9921
 
-    -- Run the Spring Boot application:
+✅ 3. Build and Run the App
 
-```bash
-  ./mvnw spring-boot:run
-```
-- Set up the frontend
+./mvnw spring-boot:run
 
-    -- Navigate to the frontend directory.
+or from your IDE (IntelliJ, VSCode)
+🔍 API Documentation (Swagger)
 
-    -- Install dependencies & start:
+Once the app is running, open:
 
-```bash
-  npm install
-```
-```bash
-  npm start
-```
-- Open in your browser
+http://localhost:9921/swagger-ui/index.html
 
-    -- Visit http://localhost:3000 to view the application.
+Here you can test and explore all API endpoints directly.
+📌 Sample API Usage
+🔸 POST /api/generate-session
 
+Request Body:
 
+{
+  "className": "CSE-A"
+}
 
+➡️ Generates a session ID + QR code (stored in /qrcodes/ folder).
+🔸 POST /api/mark-attendance
+
+Request Body:
+
+{
+  "sessionId": "generated-session-id",
+  "enrollmentNumber": "123456",
+  "gmail": "student@example.com"
+}
+
+➡️ Marks attendance for the given session.
+🔸 POST /seating_arrangement/class_room/create/class_room
+
+{
+  "classNo": "CSE-A",
+  "seatRow": [
+    ["A1", "A2", "A3"],
+    ["B1", "B2", "B3"]
+  ]
+}
+
+➡️ Creates a seating layout for the class.
+🔸 GET /seating_arrangement/class_room/get/class_room/{classNo}
+
+➡️ Retrieves layout for a given class (e.g. "CSE-A")
+📷 QR Code Output
+
+QR codes for sessions are generated using ZXing and stored at:
+
+/qrcodes/{session-id}.png
+
+You can display them in your frontend or print for students to scan.
 ## Future Improvements
 - Mobile app for on-the-go access
 
